@@ -8,32 +8,54 @@
 # cross-server sync.
 use-local-storage: false
 
+# Warn players before active boosters expire.
+# Each value is the number of ticks remaining at which to send a warning
+# (20 ticks = 1 second). A warning fires once as the remaining time crosses
+# each threshold. Boosters can opt out individually with "expiry-warning: false".
+expiry-warning-intervals:
+  - 1200 # 60 seconds remaining
+  - 600 # 30 seconds remaining
+  - 200 # 10 seconds remaining
+
+# true  = send the expiry warning in the action bar
+# false = send the expiry warning in chat
+expiry-warning-action-bar: false
+
 gui:
-  title: Boosters # Supports %page% and %max_page% placeholders.
+  title: Boosters (%page%/%max_page%) # Supports %page% and %max_page% placeholders.
   rows: 3 # The amount of rows to have (1-6).
 
-  # Navigation options, hidden if on the first/last page.
+  # Sound played when the page turns.
+  sound:
+    enabled: true
+    sound: ui.button.click
+    pitch: 1.0
+    volume: 1.0
+
+  # Navigation options. Shows the inactive item on the first/last page, or hides
+  # the button when no item-inactive is set.
   forwards-arrow:
     item: arrow name:"&fNext Page"
+    item-inactive: gray_dye name:"&7Next Page"
     row: 3
     column: 6
   backwards-arrow:
     item: arrow name:"&fPrevious Page"
+    item-inactive: gray_dye name:"&7Previous Page"
     row: 3
     column: 4
 
-  # Add as many pages as you want by appending to this list.
-  pages:
-    - page: 1
-      mask:
-        items:
-          - black_stained_glass_pane
-        pattern:
-          - "111111111"
-          - "101101101"
-          - "111111111"
-      # Custom GUI slots; see here: https://plugins.auxilor.io/all-plugins/custom-gui-slots
-      custom-slots: []
+  # The mask is shared across all pages.
+  mask:
+    items:
+      - black_stained_glass_pane
+    pattern:
+      - "111111111"
+      - "101101101"
+      - "111111111"
+
+  # Custom GUI slots, shared across all pages; see here: https://plugins.auxilor.io/all-plugins/custom-gui-slots
+  custom-slots: []
 
 sounds:
   activate:
@@ -53,4 +75,10 @@ sounds:
     sound: ENTITY_ITEM_BREAK
     volume: 2
     pitch: 0.9
+    category: AMBIENT
+  expiry-warning:
+    enabled: true
+    sound: BLOCK_NOTE_BLOCK_PLING
+    volume: 2
+    pitch: 1.0
     category: AMBIENT
